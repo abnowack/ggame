@@ -47,9 +47,6 @@ export class GGame {
         this.load = new Loader();
         this.cache = this.load.cache;
         this.canvas = this.make_canvas(width, height);
-
-        // incorporate into a draw handler
-        this.items = [];
     }
 
     make_canvas(width = 256, height = 256, border = "1px dashed black",
