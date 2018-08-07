@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>GGame!</title>
+<style> * {margin: 0; padding: 0;} </style>
+<body>
+<script type="module">
+
+import {ggame, Sprite} from "./ggame.js";
+
+let gg = ggame();
+
+gg.load.image("balrog", "balrog.bmp");
+gg.load.image("frog", "NpcFrog.bmp");
+gg.load.image("guest", "NpcGuest.bmp");
+
+gg.setup = function() {
+    this.balrog = new Sprite(this, 10, 50, "balrog");
+    this.frog = new Sprite(this, 50, 10, "frog");
+    this.guest = new Sprite(this, 50, 50, "guest");
+
+    this.items.push(this.balrog);
+};
+
+gg.update = function() {
+    if (this.input.keyRIGHT) {
+        this.balrog.x += 3;
+    } else if(this.input.keyLEFT) {
+        this.balrog.x -= 3;
+    }
+
+    if (this.input.keyUP) {
+        this.balrog.y += 3;
+    } else if(this.input.keyDOWN) {
+        this.balrog.y -= 3;
+    }
+
+};
+
+gg.draw = function() {
+    this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    this.balrog.render(this.canvas.ctx);
+};
+
+
+gg.play();
+
+</script>
+</body>
