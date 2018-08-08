@@ -81,9 +81,9 @@ export class GGame {
             } 
             else if(e.keyCode == 37) {
                 this.input.keyLEFT = true;
-            } else if(e.keyCode == 40) {
+            } else if(e.keyCode == 38) {
                 this.input.keyUP = true;
-            } else if (e.keyCode == 38) {
+            } else if(e.keyCode == 40) {
                 this.input.keyDOWN = true;
             }
         }, false); 
@@ -94,9 +94,9 @@ export class GGame {
             } 
             else if(e.keyCode == 37) {
                 this.input.keyLEFT = false;
-            } else if (e.keyCode == 40) {
-                this.input.keyUP = false;
             } else if (e.keyCode == 38) {
+                this.input.keyUP = false;
+            } else if (e.keyCode == 40) {
                 this.input.keyDOWN = false;
             }
         }, false); 
@@ -130,9 +130,57 @@ export class Sprite {
         this.x = x;
         this.y = y;
         this.name = name;
+        this.width = this.source.width;
+        this.height = this.source.height;
     }
 
     render(ctx) {
         ctx.drawImage(this.source, this.x, this.y);
+    }
+}
+
+// Thinking it would be easier to just make an array of frame_x/y positions
+// instead of calculating it every time
+export class SpriteSheet {
+    constructor(gg, x, y, width, height, name, nframes_x = -1, nframes_y = -1) {
+        this.source = gg.cache.get(name);
+        this.x = x;
+        this.y = y;
+        this.name = name;
+        this.width = width;
+        this.height = height;
+
+        if (nframes_x === -1) {
+            nframes_x = this.source.width / this.width;
+        }
+        if (nframes_y === -1) {
+            nframes_y = this.source.height / this.height;
+        }
+
+        this.nframes_x = nframes_x;
+        this.nframes_y = nframes_y;
+        this.nframes = nframes_x * nframes_y;
+        this.frame = 0;
+        this.draw_x = 0;
+        this.draw_y = 0;
+
+    }
+
+    update_frame(frame) {
+        if (frame < this.nframes) {
+            let frame_x = frame % this.nframes_x;
+            let frame_y = Math.floor(frame / this.nframes_x);
+
+            this.draw_x = frame_x * this.width;
+            this.draw_y = frame_y * this.height;
+            console.log(frame_x, frame_y);
+        } else {
+            return new Error("Frame greater than nframes");
+        }
+    }
+
+    render(ctx) {
+        ctx.drawImage(this.source, this.draw_x, this.draw_y, this.width, 
+            this.height, this.x, this.y, this.width, this.height);
     }
 }

@@ -5,16 +5,17 @@
 <body>
 <script type="module">
 
-import {ggame, Sprite} from "./ggame.js";
+import {ggame, Sprite, SpriteSheet} from "./ggame.js";
 
 let gg = ggame();
 
-gg.load.image("balrog", "balrog.bmp");
+gg.load.image("balrog", "NpcBllg.bmp");
 gg.load.image("frog", "NpcFrog.bmp");
 gg.load.image("guest", "NpcGuest.bmp");
 
 gg.setup = function() {
-    this.balrog = new Sprite(this, 10, 50, "balrog");
+    // this.balrog = new Sprite(this, 10, 50, "balrog");
+    this.balrog = new SpriteSheet(this, 10, 50, 40, 24, "balrog");
     this.frog = new Sprite(this, 50, 10, "frog");
     this.guest = new Sprite(this, 50, 50, "guest");
 };
@@ -22,14 +23,18 @@ gg.setup = function() {
 gg.update = function() {
     if (this.input.keyRIGHT) {
         this.balrog.x += 3;
+        this.balrog.update_frame(8);
     } else if(this.input.keyLEFT) {
         this.balrog.x -= 3;
+        this.balrog.update_frame(0);
     }
 
     if (this.input.keyUP) {
-        this.balrog.y += 3;
-    } else if(this.input.keyDOWN) {
         this.balrog.y -= 3;
+        this.balrog.update_frame(11);
+    } else if(this.input.keyDOWN) {
+        this.balrog.y += 3;
+        this.balrog.update_frame(12);
     }
 
 };
