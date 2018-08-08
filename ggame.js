@@ -164,6 +164,9 @@ export class SpriteSheet {
         this.draw_x = 0;
         this.draw_y = 0;
 
+        this.animations = new Map();
+        this.interval_id = undefined;
+        this.playing_animation = false;
     }
 
     update_frame(frame) {
@@ -177,6 +180,30 @@ export class SpriteSheet {
         } else {
             return new Error("Frame greater than nframes");
         }
+    }
+
+    add_animation(name, frames) {
+        this.animations.set(name, frames);
+    }
+
+    stop_animation() {
+        clearInterval(this.interval_id);
+        this.playing_animation = false;
+    }
+
+    play_animation(name) {
+        if(name === this.playing_animation) {
+            return;
+        } else if(this.animations.has(name)) {
+            this.stop_animation();
+            let counter = 0;
+            this.playing_animation = name;
+            this.interval_id = setInterval(() => {
+                let animation = this.animations.get(name);
+                this.update_frame(animation[counter]);
+                counter = (counter + 1) % animation.length;
+            }, 100);
+        } 
     }
 
     render(ctx) {
